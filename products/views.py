@@ -64,6 +64,18 @@ def product_detail(request, product_id):
 
     product = get_object_or_404(Product, pk=product_id)
 
+    # List of category names where products should have sizes
+    categories_with_sizes = [
+        'jeans', 'kitchen_dining', 'shirts',
+         'activewear', 'essentials'
+    ]
+
+    # Set has_sizes based on category name
+    if product.category and product.category.name.lower() in categories_with_sizes:
+        product.has_sizes = True
+    else:
+        product.has_sizes = False
+
     context = {
         'product': product,
     }

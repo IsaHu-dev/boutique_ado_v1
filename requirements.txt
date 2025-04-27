@@ -13,7 +13,7 @@ Django==3.2.25
 django-allauth==0.57.2
 django-ckeditor-5==0.2.17
 django-cloudinary-storage==0.3.0
-django-crispy-forms==2.3
+django-crispy-forms==1.14.0
 django-js-asset==3.1.2
 django-resized==1.0.3
 django-storages==1.14.5

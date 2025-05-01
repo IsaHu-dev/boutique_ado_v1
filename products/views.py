@@ -2,10 +2,14 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models.functions import Lower
+from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Product, Category
 
 # Create your views here.
+@staff_member_required
+def add_product(request):
+    return render(request, 'products/add_product.html')  # Create this template
 
 def all_products(request):
     """ A view to show all products, including sorting and search queries """

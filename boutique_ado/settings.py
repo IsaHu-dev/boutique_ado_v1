@@ -71,16 +71,17 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'boutique_ado.urls'
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'), # Add this line to include the templates directory
-            os.path.join(BASE_DIR, 'home', 'templates','allauth'),# Add this line to include the home app templates directory
-    ],
-        'APP_DIRS':True,
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'allauth'),
+        ],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

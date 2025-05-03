@@ -1,14 +1,10 @@
-{# Extends the base template layout #}
 {% extends "base.html" %}
-{# Loads the static files template tag library #}
 {% load static %}
 
-{# Block for including extra CSS specific to the checkout page #}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
 {% endblock %}
 
-{# Header section of the page (minimal here, just layout setup) #}
 {% block page_header %}
     <div class="container header-container">
         <div class="row">
@@ -17,36 +13,27 @@
     </div>
 {% endblock %}
 
-{# Main content block #}
 {% block content %}
     <div class="overlay"></div>
-
     <div class="container">
         <div class="row">
             <div class="col">
                 <hr>
                 <h2 class="logo-font mb-4">Thank You</h2>
                 <hr>
-                <p class="text-black">
-                    Your order information is below. A confirmation email will be sent to
-                    <strong>{{ order.email }}</strong>.
-                </p>
+                <p class="text-black">Your order information is below. A confirmation email will be sent to <strong>{{ order.email }}</strong>.</p>
             </div>
         </div>
 
-        {# Order information section #}
         <div class="row">
             <div class="col-12 col-lg-7">
                 <div class="order-confirmation-wrapper p-2 border">
-
-                    {# Order info heading #}
                     <div class="row">
                         <div class="col">
                             <small class="text-muted">Order Info:</small>
                         </div>
                     </div>
 
-                    {# Order Number #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Order Number</p>
@@ -56,7 +43,6 @@
                         </div>
                     </div>
 
-                    {# Order Date #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Order Date</p>
@@ -65,22 +51,20 @@
                             <p class="mb-0">{{ order.date }}</p>
                         </div>
                     </div>
-
-                    {# Order Details heading #}
+                    
                     <div class="row">
                         <div class="col">
                             <small class="text-muted">Order Details:</small>
                         </div>
                     </div>
 
-                    {# Loop through each line item in the order #}
                     {% for item in order.lineitems.all %}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="small mb-0 text-black font-weight-bold">
-                                {{ item.product.name }}
-                                {# Show size if applicable #}
-                                {% if item.product_size %} - Size {{ item.product_size|upper }}{% endif %}
+                                <!-- item.product_size|upper at the end of the line below is a correction, 
+                                  in the video code, Chris has item.product.size|upper which caused the size to not render -->
+                                {{ item.product.name }}{% if item.product_size %} - Size {{ item.product_size|upper}}{% endif %}
                             </p>
                         </div>
                         <div class="col-12 col-md-8 text-md-right">
@@ -89,14 +73,12 @@
                     </div>
                     {% endfor %}
 
-                    {# Delivery address section #}
                     <div class="row">
                         <div class="col">
                             <small class="text-muted">Delivering To:</small>
                         </div>
                     </div>
 
-                    {# Full Name #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Full Name</p>
@@ -105,8 +87,7 @@
                             <p class="mb-0">{{ order.full_name }}</p>
                         </div>
                     </div>
-
-                    {# Address Line 1 #}
+                    
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Address 1</p>
@@ -116,19 +97,20 @@
                         </div>
                     </div>
 
-                    {# Address Line 2 (optional) #}
                     {% if order.street_address2 %}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Address 2</p>
                         </div>
                         <div class="col-12 col-md-8 text-md-right">
+                            <!-- order.street_address2 in the code below is a correction. 
+                             In the video, Chris copy/pastes order.street_address1 
+                             but does not update it to order.street_address2 -->
                             <p class="mb-0">{{ order.street_address2 }}</p>
                         </div>
                     </div>
                     {% endif %}
 
-                    {# County (optional) #}
                     {% if order.county %}
                     <div class="row">
                         <div class="col-12 col-md-4">
@@ -140,7 +122,6 @@
                     </div>
                     {% endif %}
 
-                    {# Town/City #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Town or City</p>
@@ -150,7 +131,6 @@
                         </div>
                     </div>
 
-                    {# Postcode (optional) #}
                     {% if order.postcode %}
                     <div class="row">
                         <div class="col-12 col-md-4">
@@ -162,7 +142,6 @@
                     </div>
                     {% endif %}
 
-                    {# Country #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Country</p>
@@ -172,7 +151,6 @@
                         </div>
                     </div>
 
-                    {# Phone number #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Phone Number</p>
@@ -182,14 +160,12 @@
                         </div>
                     </div>
 
-                    {# Billing information #}
                     <div class="row">
                         <div class="col">
                             <small class="text-muted">Billing Info:</small>
                         </div>
                     </div>
 
-                    {# Order total #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Order Total</p>
@@ -199,7 +175,6 @@
                         </div>
                     </div>
 
-                    {# Delivery cost #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Delivery</p>
@@ -209,7 +184,6 @@
                         </div>
                     </div>
 
-                    {# Grand total #}
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <p class="mb-0 text-black font-weight-bold">Grand Total</p>
@@ -221,8 +195,6 @@
                 </div>
             </div>
         </div>
-
-        {# CTA button: returns user to profile or product deals depending on context #}
         <div class="row">
 			<div class="col-12 col-lg-7 text-right">
 				{% if from_profile %}

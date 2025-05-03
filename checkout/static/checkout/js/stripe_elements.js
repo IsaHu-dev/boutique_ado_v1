@@ -3,12 +3,15 @@
     https://stripe.com/docs/payments/accept-a-payment
 */
 
+// Get Stripe public key and client secret from hidden HTML elements and parse them from JSON
 const stripePublicKey = JSON.parse(document.getElementById('id_stripe_public_key').textContent);
 const clientSecret = JSON.parse(document.getElementById('id_client_secret').textContent);
 
+// Initialize Stripe and set up Elements
 const stripe = Stripe(stripePublicKey);
 const elements = stripe.elements();
 
+// Define the style for the card input
 const style = {
     base: {
         color: '#000',
@@ -16,22 +19,24 @@ const style = {
         fontSmoothing: 'antialiased',
         fontSize: '16px',
         '::placeholder': {
-            color: '#aab7c4'
+            color: '#aab7c4'  // Light grey placeholder
         }
     },
     invalid: {
-        color: '#dc3545',
-        iconColor: '#dc3545'
+        color: '#dc3545',       // Red text for invalid input
+        iconColor: '#dc3545'    // Red icon color
     }
 };
 
+// Create the card element using defined style and mount it to the DOM
 const card = elements.create('card', { style: style });
 card.mount('#card-element');
 
-// Handle real-time validation errors
+// Handle real-time validation errors from Stripe Elements
 card.addEventListener('change', function (event) {
     const errorDiv = document.getElementById('card-errors');
     if (event.error) {
+        // Display error message with icon
         const html = `
             <span class="icon" role="alert">
                 <i class="fas fa-times"></i>
@@ -40,24 +45,30 @@ card.addEventListener('change', function (event) {
         `;
         errorDiv.innerHTML = html;
     } else {
+        // Clear error message
         errorDiv.textContent = '';
     }
 });
 
-// Form submission
+// Handle the payment form submission
 const form = document.getElementById('payment-form');
 
 form.addEventListener('submit', function (ev) {
-    ev.preventDefault();
+    ev.preventDefault();  // Prevent default form submission
 
+    // Disable card input and button to prevent multiple submissions
     card.update({ disabled: true });
     document.getElementById('submit-button').disabled = true;
+
+    // Toggle UI to show loading spinner
     $('#payment-form').fadeToggle(100);
     $('#loading-overlay').fadeToggle(100);
 
+    // Get user preference to save info and CSRF token
     const saveInfo = $('#id-save-info').prop('checked');
     const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 
+    // Data to cache checkout info in the session before confirming payment
     const postData = {
         csrfmiddlewaretoken: csrfToken,
         client_secret: clientSecret,
@@ -66,7 +77,9 @@ form.addEventListener('submit', function (ev) {
 
     const url = '/checkout/cache_checkout_data/';
 
+    // Post data to Django view to cache user checkout info
     $.post(url, postData).done(function () {
+        // After successful caching, confirm the card payment
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: card,
@@ -96,6 +109,7 @@ form.addEventListener('submit', function (ev) {
                 }
             },
         }).then(function (result) {
+            // If there is an error, show it and re-enable the form
             if (result.error) {
                 const errorDiv = document.getElementById('card-errors');
                 const html = `
@@ -110,12 +124,14 @@ form.addEventListener('submit', function (ev) {
                 card.update({ disabled: false });
                 document.getElementById('submit-button').disabled = false;
             } else {
+                // If payment was successful, submit the form
                 if (result.paymentIntent.status === 'succeeded') {
                     form.submit();
                 }
             }
         });
     }).fail(function () {
-        location.reload();  // Error will show via Django messages
+        // If the POST to cache data fails, reload the page to trigger Django error messages
+        location.reload();
     });
 });

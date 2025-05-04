@@ -5,7 +5,7 @@ cffi==1.17.1
 charset-normalizer==3.4.1
 cloudinary==1.43.0
 coverage==7.6.12
-crispy-bootstrap5==2024.10
+crispy-bootstrap5==0.6
 cryptography==44.0.1
 defusedxml==0.7.1
 dj-database-url==0.5.0

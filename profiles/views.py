@@ -27,9 +27,10 @@ def profile(request):
             form.save()
             # Display a success message to the user
             messages.success(request, 'Profile updated successfully')
-
-    # If not POST, display the form pre-filled with existing profile data
-    form = UserProfileForm(instance=profile)
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:  # If not POST, display the form pre-filled with existing profile data
+        form = UserProfileForm(instance=profile)
 
     # Retrieve all orders associated with this user profile
     orders = profile.orders.all()

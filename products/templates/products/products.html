@@ -28,7 +28,11 @@
                 <div class="row mt-1 mb-2">
                     <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
                         <div class="sort-select-wrapper w-50">
-                            <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% else %}black{% endif %}">
+                            <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% elif product.image %}
+    <a href="{% url 'product_detail' product.id %}">
+        <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+    </a>
+{% else %}black{% endif %}">
                                 <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
                                 <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
                                 <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
@@ -54,11 +58,15 @@
                     {% for product in products %}
                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                             <div class="card h-100 border-0">
-                                {% if product.image %}
+                                {% if product.image_url %}
                                 <a href="{% url 'product_detail' product.id %}">
-                                    <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                                    <img class="card-img-top img-fluid" src="{{ product.image_url }}" alt="{{ product.name }}">
                                 </a>
-                                {% else %}
+                                {% elif product.image %}
+    <a href="{% url 'product_detail' product.id %}">
+        <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+    </a>
+{% else %}
                                 <a href="{% url 'product_detail' product.id %}">
                                     <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
                                 </a>
@@ -79,7 +87,11 @@
                                             {% endif %}
                                             {% if product.rating %}
                                                 <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
-                                            {% else %}
+                                            {% elif product.image %}
+    <a href="{% url 'product_detail' product.id %}">
+        <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+    </a>
+{% else %}
                                                 <small class="text-muted">No Rating</small>
                                             {% endif %}
                                             {% if request.user.is_superuser %}

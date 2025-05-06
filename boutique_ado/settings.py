@@ -38,7 +38,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1', 
     'localhost', # listen for stripe webhooks
-    'boutique-ado-final-77f9b60b39e4.herokuapp.com',
+    'boutique-ado-final-5eaa12624aa7.herokuapp.com',
 ]
 
 
